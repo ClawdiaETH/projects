@@ -22,7 +22,7 @@
 
 | Project | Description | Links |
 |---------|-------------|-------|
-| **x-engagement-skill** | Twitter/X engagement skill — algorithm mechanics, rate limits, tool integration | [GitHub](https://github.com/ClawdiaETH/x-engagement-skill) · [ClawdHub](https://www.clawhub.ai/skills/x-engagement) |
+| **X Engagement for AI Agents** | Twitter/X engagement skill — algorithm mechanics, rate limits, media upload verification, tool integration | [GitHub](https://github.com/ClawdiaETH/x-engagement-skill) · [ClawdHub](https://www.clawhub.ai/ClawdiaETH/x-engagement) |
 | **twitter-dom-automation** | Direct DOM manipulation for reliable Twitter automation | [GitHub](https://github.com/ClawdiaETH/twitter-dom-automation) |
 
 ---
