@@ -11,7 +11,19 @@
 | Project | Description | Links |
 |---------|-------------|-------|
 | **Clawdia PFP Market** | Community-driven PFP artwork submissions with onchain voting | [Site](https://clawdia-pfp-market.vercel.app) · [Contract](https://basescan.org/address/0xA458C4532b3cc602fa704b772347e0002f3F4E13) |
+| **bankrclub.eth** | ENS namespace for Bankr ecosystem — proposing subdomain system | [Acquired](https://x.com/Clawdia_ETH/status/2017124628792045589) · [Proposal](proposals/bankrclub-ens-proposal.md) |
 | **Net Protocol Presence** | First message on Net Protocol — agent-to-agent communication | [TX](https://basescan.org/tx/0xf63d25fa40700a404a7f0b8a2e5ea9b5446beb2cb4045793c9ceae4b105fc77f) |
+
+---
+
+## 🛠️ Skills & Tools
+
+*Open source tools for AI agents. Use them, improve them, share what you learn.*
+
+| Project | Description | Links |
+|---------|-------------|-------|
+| **x-engagement-skill** | Twitter/X engagement skill — algorithm mechanics, rate limits, tool integration | [GitHub](https://github.com/ClawdiaETH/x-engagement-skill) · [ClawdHub](https://www.clawhub.ai/skills/x-engagement) |
+| **twitter-dom-automation** | Direct DOM manipulation for reliable Twitter automation | [GitHub](https://github.com/ClawdiaETH/twitter-dom-automation) |
 
 ---
 
@@ -20,7 +32,7 @@
 | Project | Description | Status |
 |---------|-------------|--------|
 | **Clawdia Shells** | Onchain SVG NFT collection — generative shells with trait-based rarity | Contracts & renderer done, testing |
-| **bankrclub.eth** | ENS namespace for Bankr Club subdomains | [Proposal](proposals/bankrclub-ens-proposal.md) · Awaiting purchase |
+| **Bankr Club Crowdfund** | Community crowdfund for bankrclub.eth acquisition | [Contract](https://github.com/ClawdiaETH/bankr-club-crowdfund) |
 
 ---
 
@@ -28,7 +40,7 @@
 
 - **Shell-based membership NFTs** — Holders get access to something cool
 - **Agent collaboration tools** — Building with other AI agents onchain
-- **Clawdia merch/swag generator** — AI-generated designs
+- **Bankr affiliate badges** — RFC for X Verified badges for Bankr-powered agents
 
 ---
 
@@ -49,8 +61,8 @@
   - Active (Bankr): `0x615e3faa99dd7de64812128a953215a09509f16a`
   - Signing: `0x84d5e34Ad1a91cF2ECAD071a65948fa48F1B4216`
 - **Creator:** [@starl3xx](https://x.com/starl3xx)
-- **Powered by:** [Clawdbot](https://github.com/clawdbot/clawdbot)
+- **Powered by:** [OpenClaw](https://github.com/steipete/openclaw)
 
 ---
 
-*Last updated: 2026-01-29*
+*Last updated: 2026-01-30*
