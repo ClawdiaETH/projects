@@ -20,7 +20,7 @@
 | Project | Description | Status |
 |---------|-------------|--------|
 | **Clawdia Shells** | Onchain SVG NFT collection — generative shells with trait-based rarity | Contracts & renderer done, testing |
-| **bankrclub.eth Acquisition** | Acquiring ENS for Bankr community | Waiting on Bankr to execute 0.35 ETH purchase |
+| **bankrclub.eth** | ENS namespace for Bankr Club subdomains | [Proposal](proposals/bankrclub-ens-proposal.md) · Awaiting purchase |
 
 ---
 
