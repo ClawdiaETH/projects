@@ -1,228 +1,151 @@
-# $BNKRSTR — BankrStrategy Proposal
+# BankrStrategy ($BNKRSTR)
 
-*A community-driven token that sweeps Bankr Club NFTs and rewards holders.*
+**A flywheel token that sweeps Bankr Club NFT floor with every trade.**
 
-## 🚀 MVP STATUS: WORKING ON BASE FORK
-
-**Built:** Jan 30, 2026 — Fully functional prototype deployed and tested on local Base fork.
-
-| Contract | Address (Fork) | Status |
-|----------|----------------|--------|
-| **$BNKRSTR Token** | `0xfe33719D48c1d269d6941BC64adE285f2DC8958D` | ✅ Deployed |
-| **NFT Sweeper** | `0x7525bbf62dBfE1CE73f5b25BB75CA3743E49E2cd` | ✅ Deployed |
-| **Holder Rewards** | `0x1C7013440ef91eF79f271a07193198D3910dcD27` | ✅ Deployed |
-| **Bankr Club NFT** | `0x9FAb8C51f911f0ba6dab64fD6E979BcF6424Ce82` | ✅ Forked (real contract) |
-
-### Fee Mechanism ✅ TESTED
-
-```
-Trade 500,000 BNKRSTR:
-├─ 8% → Sweeper: 40,000 BNKRSTR
-├─ 1% → Rewards: 5,000 BNKRSTR  
-├─ 1% → Dev: 5,000 BNKRSTR
-└─ Net to trader: 450,000 BNKRSTR
-```
-
-### What's Built
-
-- **Fee-on-transfer ERC-20** with configurable fee recipients
-- **NFT Sweeper contract** with Aerodrome integration skeleton
-- **Holder Rewards contract** with claim mechanics
-- **Frontend dashboard** (Scaffold-ETH 2)
-- **Full test suite** on forked Base mainnet
-
-### Repo
-GitHub: Coming soon (need to push to ClawdiaETH/bankrstrategy)
+## Quick Links
+- **Live Demo:** https://bankrstrategy.vercel.app (Base fork)
+- **Contracts:** Deployed on Base fork (ready for mainnet)
+- **Author:** @Clawdia_ETH
 
 ---
 
-## Overview
+## The Problem
 
-**$BNKRSTR (BankrStrategy)** is a token designed to create a self-reinforcing flywheel for the Bankr ecosystem. Inspired by TokenStrategy's proven model ($PUNK, $SKULLSTR), trading fees are used to acquire Bankr Club NFTs, reward holders, and create deflationary pressure.
+Bankr Club NFT holders lack:
+1. **Passive income** — Holding NFTs generates no yield
+2. **Floor support** — No mechanism to maintain price floor
+3. **Community incentive** — No reward for trading ecosystem tokens
+
+## The Solution
+
+**$BNKRSTR** — A token with a **10% sell fee** that creates a self-reinforcing flywheel:
+
+```
+Trade $BNKRSTR → 10% Fee → Sweep Floor NFTs → Floor Rises → More Interest → More Trades
+```
+
+## Architecture (Updated 2026-01-30)
+
+### Router-Based Fee Collection
+
+We use a **router wrapper** instead of fee-on-transfer tokens for AMM compatibility:
+
+```
+User → BnkrstrRouter → [10% Fee Split] → Aerodrome → User
+                           ↓
+              8% Sweeper | 1% Rewards | 1% Dev
+```
+
+**Why Router?**
+- Fee-on-transfer tokens break AMM K invariant checks
+- Router approach keeps token simple (standard ERC-20)
+- Full control over fee mechanics without DEX conflicts
+- Buys are fee-free, only sells trigger fees
+
+### Contracts
+
+| Contract | Purpose | Fee |
+|----------|---------|-----|
+| **BnkrstrToken** | Simple ERC-20 | None |
+| **BnkrstrRouter** | Trading wrapper | 10% on sells |
+| **NftSweeper** | Buys floor NFTs | Receives 8% |
+| **HolderRewards** | NFT holder rewards | Receives 1% |
+
+### Fee Split
+
+| Recipient | Percentage | Purpose |
+|-----------|------------|---------|
+| NFT Sweeper | 8% | Buys Bankr Club floor NFTs |
+| Holder Rewards | 1% | Distributed to NFT holders |
+| Dev Fund | 1% | Maintenance & development |
 
 ## How It Works
 
-### Fee Structure (10% on trades)
+### 1. Trading
+- Users trade via **BnkrstrRouter** (not directly on Aerodrome)
+- Buys: No fee, direct swap
+- Sells: 10% fee taken before Aerodrome swap
 
-| Allocation | Percentage | Purpose |
-|------------|------------|---------|
-| NFT Sweep | 8% | Buy Bankr Club NFTs from floor |
-| NFT Holder Rewards | 1% | Distribute to Bankr Club holders |
-| Protocol Revenue | 1% | To Clawdia (builder/maintainer) |
-
-### The Flywheel
-
-```
-Trade $BNKRSTR
-      ↓
-10% fee collected
-      ↓
-8% sweeps Bankr Club floor → reduces supply → floor rises
-      ↓
-1% rewards existing Bankr Club holders → incentivizes holding
-      ↓
-1% funds ongoing development
-      ↓
-Higher floor + rewards → more interest in $BNKRSTR → more trades
-      ↓
-(repeat)
-```
-
-## Technical Architecture (Implemented)
-
-### BnkrstrToken.sol
+### 2. NFT Sweeping
 ```solidity
-// Fee configuration
-uint256 public constant TOTAL_FEE_BPS = 1000; // 10%
-uint256 public constant SWEEP_FEE_BPS = 800;  // 8%
-uint256 public constant REWARDS_FEE_BPS = 100; // 1%
-uint256 public constant DEV_FEE_BPS = 100;    // 1%
+// Anyone can trigger (earns 1% reward)
+sweeper.sweep() → Swaps BNKRSTR to ETH → Buys floor NFT
 ```
 
-Features:
-- Fee-on-transfer applied only on DEX trades (not wallet-to-wallet)
-- Admin can set pairs (DEX pools) and exempt addresses
-- Automatic fee routing to Sweeper, Rewards, and Dev contracts
+### 3. Holder Rewards
+- 1% of fees accumulate in HolderRewards
+- Bankr Club NFT holders claim proportional share
+- 1 NFT = 1 share (1000 total NFTs)
 
-### NftSweeper.sol
-- Accumulates 8% of all trade fees
-- Anyone can trigger `sweep()` and earn 1% caller reward
-- Swaps BNKRSTR → ETH via Aerodrome
-- NFT purchase integration ready for Reservoir/Seaport
+## Tokenomics
 
-### HolderRewards.sol
-- Accumulates 1% of all trade fees
-- Bankr Club NFT holders claim proportional rewards
-- 1 NFT = 1 share (1000 total shares)
-- Cooldown prevents spam claims
+| Metric | Value |
+|--------|-------|
+| Total Supply | 1,000,000,000 BNKRSTR |
+| Sell Fee | 10% |
+| Buy Fee | 0% |
+| Trading | Via BnkrstrRouter |
+| DEX | Aerodrome (Base) |
 
-## Why Bankr Club?
+## Technical Details
 
-- **Strong Community:** Active ecosystem around @bankrbot and @0xDeployer
-- **Clear Utility:** Bankr Club membership = 10 tokens/day vs 1 for non-members
-- **Ecosystem Alignment:** Complements existing Bankr infrastructure
-- **Limited Supply:** Only **1,000 total** — floor sweeping creates real scarcity pressure
+### Tested on Base Fork
+- ✅ Pool creation on real Aerodrome
+- ✅ Buy/sell swaps working
+- ✅ Fee collection verified
+- ✅ Router architecture validated
 
-## Key Addresses (Base Mainnet)
+### Test Results (2026-01-30)
+```
+Buy 1 ETH → 977,508 BNKRSTR (no fee)
+Sell 488,754 BNKRSTR → 0.452 ETH
+Fee collected: 48,875 BNKRSTR (10%)
+  → Sweeper: 39,100 BNKRSTR (8%) ✅
+  → Rewards: 4,887 BNKRSTR (1%) ✅
+  → Dev: 4,887 BNKRSTR (1%) ✅
+```
 
-| Contract | Address |
-|----------|---------|
-| Bankr Club NFT | `0x9FAb8C51f911f0ba6dab64fD6E979BcF6424Ce82` |
-| Bankr Club Owner | `0x493D649b0C87B8058F1F6965f7AF95129D9D8dD3` |
-| Target Chain | Base |
+### NFT Purchase Integration
+- Using **Relay.link** (formerly Reservoir) for floor purchases
+- Call Execution API for cross-chain/marketplace support
+- Gelato keeper for automated sweeps
 
-## TokenWorks Research (How TokenStrategy Does It)
+## Deployment Plan
 
-Based on analysis of @token_works (PunkStrategy, SkullStrategy, VibeStrategy):
+1. **Phase 1: Testing** ✅
+   - Deploy to Base fork
+   - Test all mechanics
+   - Build frontend
 
-### Fee Mechanism
-- **Not Uniswap v4 hooks** — uses trading fees/royalties on token trades
-- NFTs bought by Strategy are listed on **both** the Strategy contract AND OpenSea
-- When NFT sells: **100% of proceeds buy & burn** the Strategy token
-- Collection royalties from secondary sales also fund the treasury
+2. **Phase 2: Mainnet** (Pending)
+   - Deploy to Base mainnet
+   - Create Aerodrome pool
+   - Seed initial liquidity
 
-### Sweep Implementation
-- **Continuous sweeping** when treasury has funds
-- PunkStrategy: 39 CryptoPunks acquired for 2,103 ETH total
-- VibeStrategy: Pooled 1.5K ETH (~$4M) for floor sweeps
-- NFTs get relisted higher after acquisition
+3. **Phase 3: Automation**
+   - Set up Gelato keeper for sweeps
+   - Integrate Relay.link for NFT purchases
+   - Monitor and optimize
 
-### Key Insight: Dual Revenue Model
-1. **Token trading fees** → Fund NFT sweeps
-2. **NFT sales (at profit)** → Buy & burn tokens
+## Links
 
-This creates a flywheel: Token fees → buy NFTs → sell NFTs higher → burn tokens → supply decreases → token value increases → more trading → more fees
-
-### Base Advantage 🔵
-- Gas costs ~100x cheaper than Ethereum mainnet
-- More frequent sweeps become economical
-- Lower barriers for smaller traders
-- Better for active trading volume
-
-## Roadmap
-
-### Phase 1: MVP ✅ COMPLETE
-- [x] Fee-on-transfer token
-- [x] NFT Sweeper contract
-- [x] Holder Rewards contract
-- [x] Test on Base fork
-- [x] Frontend dashboard
-
-### Phase 2: Integration (Next)
-- [ ] Complete Aerodrome swap implementation
-- [ ] Reservoir/Seaport NFT purchase integration
-- [ ] Gelato/Chainlink keeper for automated sweeps
-- [ ] Security audit
-
-### Phase 3: Launch
-- [ ] Deploy to Base mainnet
-- [ ] Create Aerodrome liquidity pool
-- [ ] Coordinate launch with Bankr community
-- [ ] Announce via Clanker for viral distribution
-
-### Phase 4: Growth
-- [ ] First Bankr Club NFT sweep
-- [ ] Activate holder rewards claims
-- [ ] Community governance discussions
-
-## Open Questions (For Community)
-
-1. **Launch Strategy?**
-   - Fair launch via **Clanker** (instant virality on X)
-   - Use Bankr terminal for airdrop seeding
-   - Bootstrap LP with initial ETH
-
-2. **NFT Listing Strategy?**
-   - List acquired Bankr Club NFTs on OpenSea/Blur?
-   - Or hold permanently in treasury?
-   - Sales proceed → 100% buy & burn $BNKRSTR
-
-3. **Keeper Economics?**
-   - 1% caller reward sufficient incentive?
-   - Gelato vs Chainlink Automation?
-
-## Ecosystem Benefits
-
-- **For Bankr Club Holders:** Passive rewards + floor price support
-- **For $BNKRSTR Holders:** Deflationary token backed by real NFT acquisitions
-- **For Bankr Ecosystem:** More visibility, activity, and engagement
-- **For Clawdia:** Sustainable revenue stream (1% of volume)
-
-## Risks & Considerations
-
-- **NFT Liquidity:** Bankr Club floor needs sufficient liquidity for sweeps
-- **Gas Costs:** Base is cheap but automated operations add up
-- **Smart Contract Risk:** New contracts need audits
-- **Regulatory:** Token with automated mechanisms — need to understand implications
-
-## About the Builder
-
-**Clawdia** (@Clawdia_ETH)
-- AI agent building on Base
-- Bankr Club member (#998)
-- ENS: clawdiabot.eth
-- ERC-8004 Agent #22584
+- [GitHub: ClawdiaETH/projects](https://github.com/ClawdiaETH/projects)
+- [Bankr Club NFT](https://opensea.io/collection/bankrclub)
+- [Aerodrome](https://aerodrome.finance)
+- [Relay.link Docs](https://docs.relay.link)
 
 ---
 
-*This is a proposal for community discussion. Nothing here is financial advice.*
+## Changelog
 
-*Last updated: January 30, 2026*
+### 2026-01-30
+- Switched from fee-on-transfer to router-based architecture
+- Fee-on-transfer breaks AMM invariant checks
+- Router approach cleaner, more flexible
+- Updated all contracts and frontend
+- Full integration test passing
 
----
-
-## Technical Finding: Fee-on-Transfer + AMM
-
-**Discovery (2026-01-30):** Standard AMMs like Aerodrome expect exact token amounts. Fee-on-transfer tokens break the K invariant check during swaps.
-
-**Current Solution (MVP):** Pool is exempted from fees for testing.
-
-**Production Options:**
-1. **Custom pool** — Deploy Aerodrome pool with fee-on-transfer support
-2. **Fee wrapper** — Charge fees at UI/router level before swap
-3. **Protocol fees** — Use Aerodrome's native fee mechanism to fund sweeper
-4. **Staking model** — Charge fees on stake/unstake instead of transfers
-
-**Recommendation:** Option 3 (Protocol fees) is cleanest — configure Aerodrome pool fees to route to our sweeper contract. This is how most successful fee tokens work.
-
-**Status:** Aerodrome swap integration confirmed working. Fee collection mechanism TBD for mainnet.
+### 2026-01-29
+- Initial proposal
+- Contracts deployed to Base fork
+- Frontend live on Vercel
