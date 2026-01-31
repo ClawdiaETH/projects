@@ -3,7 +3,8 @@
 **A flywheel token that sweeps Bankr Club NFT floor with every trade.**
 
 ## Quick Links
-- **Live Demo:** https://bankrstrategy.vercel.app (Base fork)
+- **Live Demo:** https://bankrstrategy.vercel.app
+- **Source Code:** https://github.com/ClawdiaETH/bankrstrategy
 - **Contracts:** Deployed on Base fork (ready for mainnet)
 - **Author:** @Clawdia_ETH
 
@@ -24,7 +25,7 @@ Bankr Club NFT holders lack:
 Trade $BNKRSTR → 10% Fee → Sweep Floor NFTs → Floor Rises → More Interest → More Trades
 ```
 
-## Architecture (Updated 2026-01-30)
+## Architecture
 
 ### Router-Based Fee Collection
 
@@ -46,10 +47,10 @@ User → BnkrstrRouter → [10% Fee Split] → Aerodrome → User
 
 | Contract | Purpose | Fee |
 |----------|---------|-----|
-| **BnkrstrToken** | Simple ERC-20 | None |
-| **BnkrstrRouter** | Trading wrapper | 10% on sells |
-| **NftSweeper** | Buys floor NFTs | Receives 8% |
-| **HolderRewards** | NFT holder rewards | Receives 1% |
+| **BnkrstrToken** | Simple ERC-20 (1B supply) | None |
+| **BnkrstrRouter** | Trading wrapper + fee collection | 10% on sells |
+| **NftSweeper** | Accumulates fees → buys floor NFTs | Receives 8% |
+| **HolderRewards** | Distributes rewards to NFT holders | Receives 1% |
 
 ### Fee Split
 
@@ -95,7 +96,7 @@ sweeper.sweep() → Swaps BNKRSTR to ETH → Buys floor NFT
 - ✅ Fee collection verified
 - ✅ Router architecture validated
 
-### Test Results (2026-01-30)
+### Test Results
 ```
 Buy 1 ETH → 977,508 BNKRSTR (no fee)
 Sell 488,754 BNKRSTR → 0.452 ETH
@@ -105,10 +106,13 @@ Fee collected: 48,875 BNKRSTR (10%)
   → Dev: 4,887 BNKRSTR (1%) ✅
 ```
 
-### NFT Purchase Integration
-- Using **Relay.link** (formerly Reservoir) for floor purchases
-- Call Execution API for cross-chain/marketplace support
-- Gelato keeper for automated sweeps
+### Integrations
+
+| Service | Status | Purpose |
+|---------|--------|---------|
+| Aerodrome | ✅ Tested | DEX for BNKRSTR/WETH trading |
+| Gelato | ✅ Account ready | Automated sweep triggers |
+| Relay.link | ⏳ Pending | NFT floor purchases |
 
 ## Deployment Plan
 
@@ -116,29 +120,38 @@ Fee collected: 48,875 BNKRSTR (10%)
    - Deploy to Base fork
    - Test all mechanics
    - Build frontend
+   - Frontend redesign with new branding
 
-2. **Phase 2: Mainnet** (Pending)
-   - Deploy to Base mainnet
-   - Create Aerodrome pool
-   - Seed initial liquidity
+2. **Phase 2: Mainnet** (Pending funding)
+   - Deploy contracts to Base mainnet
+   - Create Aerodrome BNKRSTR/WETH pool
+   - Seed initial liquidity (~$1,500 from bounty)
 
 3. **Phase 3: Automation**
-   - Set up Gelato keeper for sweeps
+   - Configure Gelato Web3 Function for sweeps
    - Integrate Relay.link for NFT purchases
    - Monitor and optimize
 
 ## Links
 
-- [GitHub: ClawdiaETH/projects](https://github.com/ClawdiaETH/projects)
+- [Source Code](https://github.com/ClawdiaETH/bankrstrategy)
+- [Live Demo](https://bankrstrategy.vercel.app)
 - [Bankr Club NFT](https://opensea.io/collection/bankrclub)
 - [Aerodrome](https://aerodrome.finance)
 - [Relay.link Docs](https://docs.relay.link)
+- [Gelato](https://app.gelato.network)
 
 ---
 
 ## Changelog
 
-### 2026-01-30
+### 2026-01-30 (Evening)
+- Frontend redesign with dark theme + new logo
+- GitHub repo created: ClawdiaETH/bankrstrategy
+- Gelato account configured
+- Deployed to Vercel
+
+### 2026-01-30 (Earlier)
 - Switched from fee-on-transfer to router-based architecture
 - Fee-on-transfer breaks AMM invariant checks
 - Router approach cleaner, more flexible
@@ -148,4 +161,3 @@ Fee collected: 48,875 BNKRSTR (10%)
 ### 2026-01-29
 - Initial proposal
 - Contracts deployed to Base fork
-- Frontend live on Vercel
