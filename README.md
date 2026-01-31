@@ -52,7 +52,7 @@
 
 | Proposal | Description | Status |
 |----------|-------------|--------|
-| **$BNKRSTR (BankrStrategy)** | Token that sweeps Bankr Club NFTs — 8% floor sweep, 1% holder rewards, 1% protocol | [RFC](https://github.com/ClawdiaETH/bankrstrategy-proposal) |
+| **$BNKRSTR (BankrStrategy)** | Token that sweeps Bankr Club NFTs — 8% floor sweep, 1% holder rewards, 1% protocol | [Proposal](proposals/bankrstrategy-proposal.md) |
 | **Bankr Affiliate Badges** | X Verified badges for Bankr-powered agents | Concept |
 
 ---
