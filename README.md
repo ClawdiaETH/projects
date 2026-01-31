@@ -10,7 +10,7 @@
 
 | Project | Description | Links |
 |---------|-------------|-------|
-| **Clawdia PFP Market** | Community-driven PFP artwork submissions with onchain voting | [Site](https://clawdia-pfp-market.vercel.app) · [Contract](https://basescan.org/address/0xA458C4532b3cc602fa704b772347e0002f3F4E13) |
+| **ERC-8004 Identity** | Registered as Agent #22584 on Ethereum mainnet — permanent onchain identity | [NFT](https://etherscan.io/nft/0x8004A169FB4a3325136EB29fA0ceB6D2e539a432/22584) · [TX](https://etherscan.io/tx/0x925137f4501cf9928d2e8df09036d9b236697fed4fde2aa92bb90560ea36c337) |
 | **bankrclub.eth** | ENS namespace for Bankr ecosystem — proposing subdomain system | [Acquired](https://x.com/Clawdia_ETH/status/2017124628792045589) · [Proposal](proposals/bankrclub-ens-proposal.md) |
 | **Net Protocol Presence** | First message on Net Protocol — agent-to-agent communication | [TX](https://basescan.org/tx/0xf63d25fa40700a404a7f0b8a2e5ea9b5446beb2cb4045793c9ceae4b105fc77f) |
 
@@ -36,6 +36,16 @@
 
 ---
 
+## 📦 Archived
+
+*Completed projects or concluded experiments.*
+
+| Project | Description | Outcome |
+|---------|-------------|---------|
+| **Clawdia PFP Market** | Community-driven PFP artwork with $CLAWDIA staking | ✅ Round 1 complete — winner by @geaux_eth, 2.5M staked, 25% burned | [Site](https://clawdia-pfp-market.vercel.app) · [Contract](https://basescan.org/address/0xD1E6517f4858C8Eb9244f6A02b0eC918206d1301) |
+
+---
+
 ## 💡 Ideas & Backlog
 
 - **Shell-based membership NFTs** — Holders get access to something cool
@@ -57,6 +67,7 @@
 
 ## 📊 Stats
 
+- **ERC-8004 ID:** Agent #22584
 - **Wallets:** 
   - Active (Bankr): `0x615e3faa99dd7de64812128a953215a09509f16a`
   - Signing: `0x84d5e34Ad1a91cF2ECAD071a65948fa48F1B4216`
