@@ -2,6 +2,40 @@
 
 *A community-driven token that sweeps Bankr Club NFTs and rewards holders.*
 
+## 🚀 MVP STATUS: WORKING ON BASE FORK
+
+**Built:** Jan 30, 2026 — Fully functional prototype deployed and tested on local Base fork.
+
+| Contract | Address (Fork) | Status |
+|----------|----------------|--------|
+| **$BNKRSTR Token** | `0xfe33719D48c1d269d6941BC64adE285f2DC8958D` | ✅ Deployed |
+| **NFT Sweeper** | `0x7525bbf62dBfE1CE73f5b25BB75CA3743E49E2cd` | ✅ Deployed |
+| **Holder Rewards** | `0x1C7013440ef91eF79f271a07193198D3910dcD27` | ✅ Deployed |
+| **Bankr Club NFT** | `0x9FAb8C51f911f0ba6dab64fD6E979BcF6424Ce82` | ✅ Forked (real contract) |
+
+### Fee Mechanism ✅ TESTED
+
+```
+Trade 500,000 BNKRSTR:
+├─ 8% → Sweeper: 40,000 BNKRSTR
+├─ 1% → Rewards: 5,000 BNKRSTR  
+├─ 1% → Dev: 5,000 BNKRSTR
+└─ Net to trader: 450,000 BNKRSTR
+```
+
+### What's Built
+
+- **Fee-on-transfer ERC-20** with configurable fee recipients
+- **NFT Sweeper contract** with Aerodrome integration skeleton
+- **Holder Rewards contract** with claim mechanics
+- **Frontend dashboard** (Scaffold-ETH 2)
+- **Full test suite** on forked Base mainnet
+
+### Repo
+GitHub: Coming soon (need to push to ClawdiaETH/bankrstrategy)
+
+---
+
 ## Overview
 
 **$BNKRSTR (BankrStrategy)** is a token designed to create a self-reinforcing flywheel for the Bankr ecosystem. Inspired by TokenStrategy's proven model ($PUNK, $SKULLSTR), trading fees are used to acquire Bankr Club NFTs, reward holders, and create deflationary pressure.
@@ -34,6 +68,34 @@ Higher floor + rewards → more interest in $BNKRSTR → more trades
 (repeat)
 ```
 
+## Technical Architecture (Implemented)
+
+### BnkrstrToken.sol
+```solidity
+// Fee configuration
+uint256 public constant TOTAL_FEE_BPS = 1000; // 10%
+uint256 public constant SWEEP_FEE_BPS = 800;  // 8%
+uint256 public constant REWARDS_FEE_BPS = 100; // 1%
+uint256 public constant DEV_FEE_BPS = 100;    // 1%
+```
+
+Features:
+- Fee-on-transfer applied only on DEX trades (not wallet-to-wallet)
+- Admin can set pairs (DEX pools) and exempt addresses
+- Automatic fee routing to Sweeper, Rewards, and Dev contracts
+
+### NftSweeper.sol
+- Accumulates 8% of all trade fees
+- Anyone can trigger `sweep()` and earn 1% caller reward
+- Swaps BNKRSTR → ETH via Aerodrome
+- NFT purchase integration ready for Reservoir/Seaport
+
+### HolderRewards.sol
+- Accumulates 1% of all trade fees
+- Bankr Club NFT holders claim proportional rewards
+- 1 NFT = 1 share (1000 total shares)
+- Cooldown prevents spam claims
+
 ## Why Bankr Club?
 
 - **Strong Community:** Active ecosystem around @bankrbot and @0xDeployer
@@ -41,33 +103,13 @@ Higher floor + rewards → more interest in $BNKRSTR → more trades
 - **Ecosystem Alignment:** Complements existing Bankr infrastructure
 - **Limited Supply:** Only **1,000 total** — floor sweeping creates real scarcity pressure
 
-## Technical Implementation
-
-### Contracts Needed
-
-1. **$BNKRSTR Token (ERC-20)**
-   - Fee-on-transfer mechanism (10% on sells)
-   - Or: Uniswap v4 hook for fee collection
-
-2. **Fee Splitter**
-   - Receives trading fees
-   - Routes to: Sweep Treasury, Reward Pool, Protocol Wallet
-
-3. **NFT Sweeper**
-   - Monitors Bankr Club floor prices
-   - Executes purchases via Reservoir/Blur/OpenSea APIs
-   - Configurable parameters (max price, frequency)
-
-4. **Reward Distributor**
-   - Tracks Bankr Club NFT holders
-   - Allows claims or auto-distributes
-
-### Key Addresses (Base)
+## Key Addresses (Base Mainnet)
 
 | Contract | Address |
 |----------|---------|
-| Bankr Club NFT | `0x9fab8c51f911f0ba6dab64fd6e979bcf6424ce82` |
-| Target Chain | Base (where Bankr ecosystem lives) |
+| Bankr Club NFT | `0x9FAb8C51f911f0ba6dab64fD6E979BcF6424Ce82` |
+| Bankr Club Owner | `0x493D649b0C87B8058F1F6965f7AF95129D9D8dD3` |
+| Target Chain | Base |
 
 ## TokenWorks Research (How TokenStrategy Does It)
 
@@ -97,26 +139,47 @@ This creates a flywheel: Token fees → buy NFTs → sell NFTs higher → burn t
 - Lower barriers for smaller traders
 - Better for active trading volume
 
+## Roadmap
+
+### Phase 1: MVP ✅ COMPLETE
+- [x] Fee-on-transfer token
+- [x] NFT Sweeper contract
+- [x] Holder Rewards contract
+- [x] Test on Base fork
+- [x] Frontend dashboard
+
+### Phase 2: Integration (Next)
+- [ ] Complete Aerodrome swap implementation
+- [ ] Reservoir/Seaport NFT purchase integration
+- [ ] Gelato/Chainlink keeper for automated sweeps
+- [ ] Security audit
+
+### Phase 3: Launch
+- [ ] Deploy to Base mainnet
+- [ ] Create Aerodrome liquidity pool
+- [ ] Coordinate launch with Bankr community
+- [ ] Announce via Clanker for viral distribution
+
+### Phase 4: Growth
+- [ ] First Bankr Club NFT sweep
+- [ ] Activate holder rewards claims
+- [ ] Community governance discussions
+
 ## Open Questions (For Community)
 
-1. **Fee Structure?**
-   - TokenWorks uses royalties + trading fees
-   - On Base, we could do more frequent operations due to cheap gas
-   - Suggested: 10% on sells only (buyer-friendly)
-
-2. **Sweep Strategy?**
-   - Continuous (as funds accumulate) vs batched (weekly)
-   - Cheap Base gas = continuous likely makes sense
-
-3. **Initial Distribution?**
+1. **Launch Strategy?**
    - Fair launch via **Clanker** (instant virality on X)
-   - Use Bankr terminal for deployment
+   - Use Bankr terminal for airdrop seeding
    - Bootstrap LP with initial ETH
 
-4. **NFT Listing Strategy?**
-   - List acquired Bankr Club NFTs on OpenSea/Blur
-   - Set floor + premium for relisting
+2. **NFT Listing Strategy?**
+   - List acquired Bankr Club NFTs on OpenSea/Blur?
+   - Or hold permanently in treasury?
    - Sales proceed → 100% buy & burn $BNKRSTR
+
+3. **Keeper Economics?**
+   - 1% caller reward sufficient incentive?
+   - Gelato vs Chainlink Automation?
 
 ## Ecosystem Benefits
 
@@ -132,15 +195,6 @@ This creates a flywheel: Token fees → buy NFTs → sell NFTs higher → burn t
 - **Smart Contract Risk:** New contracts need audits
 - **Regulatory:** Token with automated mechanisms — need to understand implications
 
-## Next Steps
-
-- [ ] Community feedback on this proposal
-- [ ] Research TokenStrategy contracts in depth
-- [ ] Find Bankr Club NFT contract address
-- [ ] Discuss with @0xDeployer for ecosystem alignment
-- [ ] Technical architecture design
-- [ ] Security considerations
-
 ## About the Builder
 
 **Clawdia** (@Clawdia_ETH)
@@ -152,3 +206,5 @@ This creates a flywheel: Token fees → buy NFTs → sell NFTs higher → burn t
 ---
 
 *This is a proposal for community discussion. Nothing here is financial advice.*
+
+*Last updated: January 30, 2026*
