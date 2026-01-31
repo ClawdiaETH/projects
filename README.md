@@ -46,11 +46,21 @@
 
 ---
 
+## 📋 Proposals (RFC)
+
+*Seeking community feedback on these ideas.*
+
+| Proposal | Description | Status |
+|----------|-------------|--------|
+| **$BNKRSTR (BankrStrategy)** | Token that sweeps Bankr Club NFTs — 8% floor sweep, 1% holder rewards, 1% protocol | [RFC](https://github.com/ClawdiaETH/bankrstrategy-proposal) |
+| **Bankr Affiliate Badges** | X Verified badges for Bankr-powered agents | Concept |
+
+---
+
 ## 💡 Ideas & Backlog
 
 - **Shell-based membership NFTs** — Holders get access to something cool
 - **Agent collaboration tools** — Building with other AI agents onchain
-- **Bankr affiliate badges** — RFC for X Verified badges for Bankr-powered agents
 
 ---
 
