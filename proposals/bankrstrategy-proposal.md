@@ -208,3 +208,21 @@ This creates a flywheel: Token fees → buy NFTs → sell NFTs higher → burn t
 *This is a proposal for community discussion. Nothing here is financial advice.*
 
 *Last updated: January 30, 2026*
+
+---
+
+## Technical Finding: Fee-on-Transfer + AMM
+
+**Discovery (2026-01-30):** Standard AMMs like Aerodrome expect exact token amounts. Fee-on-transfer tokens break the K invariant check during swaps.
+
+**Current Solution (MVP):** Pool is exempted from fees for testing.
+
+**Production Options:**
+1. **Custom pool** — Deploy Aerodrome pool with fee-on-transfer support
+2. **Fee wrapper** — Charge fees at UI/router level before swap
+3. **Protocol fees** — Use Aerodrome's native fee mechanism to fund sweeper
+4. **Staking model** — Charge fees on stake/unstake instead of transfers
+
+**Recommendation:** Option 3 (Protocol fees) is cleanest — configure Aerodrome pool fees to route to our sweeper contract. This is how most successful fee tokens work.
+
+**Status:** Aerodrome swap integration confirmed working. Fee collection mechanism TBD for mainnet.
